@@ -16,4 +16,7 @@ router.get('/profile', authMiddleware, AuthController.getProfile);
 // POST /api/v1/auth/refresh-token - Refrescar access token
 router.post('/refresh-token', AuthController.refreshToken);
 
+// POST /api/v1/auth/logout - Cerrar sesión
+router.post('/logout', AuthController.logout);
+
 module.exports = router;

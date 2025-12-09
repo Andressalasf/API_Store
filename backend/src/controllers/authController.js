@@ -227,6 +227,39 @@ class AuthController {
       });
     }
   }
+
+  // Logout - Eliminar refresh token
+  static async logout(req, res) {
+    try {
+      const { refreshToken } = req.body;
+
+      console.log('Logout attempt with token:', refreshToken);
+
+      if (!refreshToken) {
+        return res.status(400).json({
+          message: 'Refresh token is required',
+        });
+      }
+
+      // Verificar si el token existe antes de eliminar
+      const existingToken = await RefreshToken.findByToken(refreshToken);
+      console.log('Token found in DB:', existingToken ? 'Yes' : 'No');
+
+      // Eliminar el refresh token de la base de datos
+      const result = await RefreshToken.deleteByToken(refreshToken);
+      console.log('Token deleted:', result);
+
+      return res.status(200).json({
+        message: 'Logout successful',
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+      return res.status(500).json({
+        message: 'Internal server error',
+        error: error.message,
+      });
+    }
+  }
 }
 
 module.exports = AuthController;

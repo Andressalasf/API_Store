@@ -18,8 +18,9 @@ class RefreshToken {
   }
 
   static async deleteByToken(token) {
-    const query = 'DELETE FROM refresh_tokens WHERE token = $1';
-    await pool.query(query, [token]);
+    const query = 'DELETE FROM refresh_tokens WHERE token = $1 RETURNING *';
+    const result = await pool.query(query, [token]);
+    return result.rows[0];
   }
 
   static async deleteExpiredTokens() {
